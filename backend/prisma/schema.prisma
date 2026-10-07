@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+// ENUMS
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RESERVED
+  SWAPPED
+  REDEEMED
+  REMOVED
+}
+
+enum SwapStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum PointsType {
+  EARN_LISTING
+  EARN_SWAP
+  SPEND_REDEEM
+  ADMIN_ADJUSTMENT
+  BONUS
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+
+// MODELS
+
+model User {
+  id         String  @id @default(cuid())
+  name       String
+  email      String  @unique
+  password   String
+  role       Role    @default(USER)
+  points     Int     @default(0)
+  isVerified Boolean @default(false)
+  isBlocked  Boolean @default(false)
+  avatar     String?
+  bio        String?
+  phone      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  items                Item[]
+  swapRequestsSent     SwapRequest[]             @relation("SwapRequester")
+  swapRequestsReceived SwapRequest[]             @relation("SwapOwner")
+  pointsHistory        PointsTransaction[]
+  reports              Report[]                  @relation("Reporter")
+  notifications        Notification[]
+  messagesSent         Message[]                 @relation("Sender")
+  conversations        ConversationParticipant[]
+  loginHistories       LoginHistory[]
+
+  @@map("users")
+}
+
+model Item {
+  id           String     @id @default(cuid())
+  title        String
+  description  String
+  category     String
+  type         String? // e.g. Shirt, Pants, Dress
+  size         String
+  condition    String // New, Like New, Good, Fair
+  tags         String[] // Array of tags
+  images       String[] // Array of image URLs
+  pointsValue  Int // Points needed to redeem
+  status       ItemStatus @default(PENDING)
+  rejectReason String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  swapRequests SwapRequest[]
+  reports      Report[]
+
+  @@index([status])
+  @@index([userId])
+  @@index([category])
+  @@map("items")
+}
+
+model SwapRequest {
+  id      String     @id @default(cuid())
+  status  SwapStatus @default(PENDING)
+  message String? // Optional message from requester
+
+  requesterId String
+  requester   User   @relation("SwapRequester", fields: [requesterId], references: [id])
+
+  ownerId String
+  owner   User   @relation("SwapOwner", fields: [ownerId], references: [id])
+
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  // Optional: Item offered in exchange (for direct swap)
+  offeredItemId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([requesterId])
+  @@index([ownerId])
+  @@map("swap_requests")
+}
+
+model PointsTransaction {
+  id           String     @id @default(cuid())
+  type         PointsType
+  amount       Int // Positive = credit, Negative = debit
+  balanceAfter Int
+  description  String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Optional references
+  itemId String?
+  swapId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("points_transactions")
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  reason      String
+  description String?
+  status      ReportStatus @default(PENDING)
+
+  reporterId String
+  reporter   User   @relation("Reporter", fields: [reporterId], references: [id])
+
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@map("reports")
+}
+
+model Notification {
+  id      String  @id @default(cuid())
+  title   String
+  message String
+  isRead  Boolean @default(false)
+  type    String? // e.g. SWAP_REQUEST, ITEM_APPROVED, POINTS_EARNED
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+
+
+// CHAT MODELS
+
+model Conversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  joinedAt DateTime @default(now())
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id      String  @id @default(cuid())
+  content String
+  isRead  Boolean @default(false)
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  senderId String
+  sender   User   @relation("Sender", fields: [senderId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId])
+  @@map("messages")
+}
+
+
+
+// USER LOGIN HISTORY
+
+model LoginHistory {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  ipAddress String?
+  userAgent String? // Browser + Device info
+  status    String // "SUCCESS" or "FAILED"
+  location  String? // Optional (e.g. "Delhi, India")
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("login_history")
+}
