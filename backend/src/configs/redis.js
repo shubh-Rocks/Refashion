@@ -7,15 +7,22 @@ const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
 
 const originalSet = redis.set.bind(redis);
 redis.set = function (key, value, ...args) {
-  if (args.length === 1 && typeof args[0] === "object" && args[0] !== null) {
-    if (args[0].EX) return originalSet(key, value, "EX", args[0].EX);
-    if (args[0].PX) return originalSet(key, value, "PX", args[0].PX);
+  if (typeof args[0] === "object" && args[0] !== null) {
+    const opts = args[0];
+    const cb = typeof args[1] === "function" ? args[1] : undefined;
+    const extra = [];
+
+    if (opts.EX) extra.push("EX", opts.EX);
+    if (opts.PX) extra.push("PX", opts.PX);
+    if (cb) extra.push(cb);
+
+    return originalSet(key, value, ...extra);
   }
   return originalSet(key, value, ...args);
 };
 
 redis.on("connect", () => {
-  console.log("redis connected sucessfully");
+  console.log("redis connected successfully");
 });
 
 redis.on("error", (err) => {
