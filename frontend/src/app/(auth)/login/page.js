@@ -13,7 +13,6 @@ import Logo from "@/components/landing/Logo";
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, setLoading, isLoading } = useAuthStore();
-  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -29,7 +28,7 @@ export default function LoginPage() {
     try {
       const res = await authService.login(data);
       setUser(res.data.user);
-      router.push("/dashboard");
+      router.push("/user");
     } catch (err) {
       setError("root", {
         message: err.response?.data?.message || "Login failed",
@@ -145,7 +144,6 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
                 placeholder="At least 8 characters"
                 autoComplete="current-password"
                 {...register("password")}
@@ -153,29 +151,9 @@ export default function LoginPage() {
               />
               <button
                 type="button"
-                aria-label={showPassword ? "Hide password" : "Show password"}
                 onClick={() => setShowPassword((v) => !v)}
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#6f9a7e] hover:text-[#14603c]"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  {showPassword ? (
-                    <path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.2-.9M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                  ) : (
-                    <>
-                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </>
-                  )}
-                </svg>
-              </button>
+              ></button>
             </div>
             {errors.password && (
               <p className="mt-1 text-xs text-[#b3392b]">

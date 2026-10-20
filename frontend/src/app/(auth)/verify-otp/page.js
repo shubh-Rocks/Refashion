@@ -86,9 +86,7 @@ export default function VerifyOtpPage() {
     }
   };
 
-  const onInvalid = (errors) => {
-    console.log("❌ Zod Validation Failed Errors:", errors);
-  };
+ 
   const onSubmit = async (data) => {
     console.log("Form submitted data:", data);
     setLoading(true);
@@ -145,7 +143,7 @@ export default function VerifyOtpPage() {
 
         {/* OTP Form */}
         <form
-          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-y-6"
         >
           <input type="hidden" {...register("otp")} />

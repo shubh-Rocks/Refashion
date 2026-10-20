@@ -47,7 +47,6 @@ export default function RegisterPage() {
           <Logo />
         </div>
         <div className="absolute right-30">
-          {" "}
           <Link
             href="/"
             className="text-sm font-medium text-[#134e2c] hover:underline"
