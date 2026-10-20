@@ -6,7 +6,7 @@ export default function Logo({ showText = true }) {
       <span className="grid size-10 place-items-center rounded-full bg-lime text-forest">
         <Leaf className="size-5 -rotate-12" />
       </span>
-      {showText && <span className="font-display text-2xl font-bold tracking-tight text-forest">REWEAR</span>}
+      {showText && <span className="font-display text-2xl font-bold tracking-tight text-forest">ReFashion</span>}
     </a>
   );
 }

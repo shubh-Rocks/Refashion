@@ -32,6 +32,6 @@ app.use("/api/auth", authRoutes);
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-  console.log("server is running in port:", 3000);
+app.listen(5000, () => {
+  console.log("server is running in port:", 5000);
 });
