@@ -1,13 +1,14 @@
-import { Leaf } from "lucide-react";
- 
+import Image from "next/image";
+
 export default function Logo({ showText = true }) {
   return (
-    <a href="/" className="flex items-center gap-3">
-      <span className="grid size-10 place-items-center rounded-full bg-lime text-forest">
-        <Leaf className="size-5 -rotate-12" />
-      </span>
-      {showText && <span className="font-display text-2xl font-bold tracking-tight text-forest">ReFashion</span>}
+    <a href="/" className="flex items-center">
+      <Image src="/logo.png" alt="Company Logo" width={100} height={40} />
+      {showText && (
+        <span className="font-display text-2xl font-bold tracking-tight text-forest">
+          ReFashion
+        </span>
+      )}
     </a>
   );
 }
- 

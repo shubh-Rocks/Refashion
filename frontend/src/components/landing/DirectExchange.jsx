@@ -7,7 +7,7 @@ export default function DirectExchange() {
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:gap-20 lg:px-10 lg:py-24">
         <div className="relative aspect-[4/5] w-full max-w-xl overflow-hidden rounded-xl lg:max-w-none">
           <Image
-            src="/images/label.jpg"
+            src="https://ik.imagekit.io/shubhmishra/direct-swap-dark-green-shirt.jpg"
             alt="Care label on a green linen garment"
             fill
             sizes="(min-width: 1024px) 45vw, 100vw"

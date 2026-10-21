@@ -14,7 +14,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-moss/40 bg-cream/90 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-65">
           <Logo />
           <nav className="hidden items-center gap-8 md:flex">
             {links.map((l) => (
@@ -30,7 +30,7 @@ export default function Navbar() {
         </div>
         <div className="hidden items-center gap-6 md:flex">
           <a href="/login" className="font-medium text-forest">
-            Log in
+            Log in/Sign up
           </a>
           <a
             href="/list"

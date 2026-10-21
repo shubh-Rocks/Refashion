@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, HandHeart } from "lucide-react";
 
 export default function Hero() {
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-28">
       <div>
         <span className="inline-flex items-center gap-2 rounded-md bg-sand px-4 py-3 text-sm font-bold uppercase text-forest">
-          <Sparkles className="size-4" /> The new standard of pre-loved
+          <HandHeart /> The new standard of pre-loved
         </span>
         <h1 className="mt-8 font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-forest sm:text-6xl lg:text-7xl">
           Swap your style.
@@ -34,17 +34,16 @@ export default function Hero() {
       </div>
 
       <div className="relative pb-10 pl-0 sm:pl-10 lg:pl-16">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-sand">
+        <div className="relative aspect-[6/5] overflow-hidden rounded-2xl bg-sand">
           <Image
-            src="/images/hero.jpg"
-            alt="Friends swapping clothes"
-            fill
-            priority
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
+            src="https://ik.imagekit.io/shubhmishra/points-collection.jpg"
+            alt="Points Collection"
+            width={1920}
+            height={1080}
+            unoptimized
           />
         </div>
-        <div className="absolute bottom-0 left-4 max-w-[17rem] rounded-lg bg-mustard p-6 shadow-xl sm:left-0 sm:p-8">
+        <div className="absolute bottom-0 left-4 max-w-[14rem] rounded-lg bg-mustard p-3 shadow-xl sm:left-0 sm:p-5">
           <p className="font-display text-2xl font-bold text-forest">
             Pass it on
           </p>

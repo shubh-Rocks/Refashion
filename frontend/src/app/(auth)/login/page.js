@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -28,7 +26,11 @@ export default function LoginPage() {
     try {
       const res = await authService.login(data);
       setUser(res.data.user);
-      router.push("/user");
+      if (res.data.user.role === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/user");
+      }
     } catch (err) {
       setError("root", {
         message: err.response?.data?.message || "Login failed",
@@ -143,17 +145,13 @@ export default function LoginPage() {
             </div>
             <div className="relative">
               <input
+                type="password"
                 id="password"
                 placeholder="At least 8 characters"
                 autoComplete="current-password"
                 {...register("password")}
-                className={`${inputClass(errors.password)} pr-12`}
+                className={`${inputClass(errors.password)}`}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#6f9a7e] hover:text-[#14603c]"
-              ></button>
             </div>
             {errors.password && (
               <p className="mt-1 text-xs text-[#b3392b]">
