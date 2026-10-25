@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import sessionMiddleware from "./src/configs/session.js";
 import authRoutes from "./src/routes/auth.route.js";
+import adminRoutes from "./src/routes/admin.route.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(errorHandler);
 

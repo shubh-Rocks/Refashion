@@ -83,12 +83,12 @@ model Item {
   title        String
   description  String
   category     String
-  type         String? // e.g. Shirt, Pants, Dress
+  type         String? 
   size         String
-  condition    String // New, Like New, Good, Fair
-  tags         String[] // Array of tags
-  images       String[] // Array of image URLs
-  pointsValue  Int // Points needed to redeem
+  condition    String 
+  tags         String[] 
+  images       String[] 
+  pointsValue  Int 
   status       ItemStatus @default(PENDING)
   rejectReason String?
 
