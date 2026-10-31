@@ -55,9 +55,39 @@ class UserRepository {
       },
     });
   }
-  
+
   countAll() {
     return prisma.user.count();
+  }
+
+  findById(id) {
+    return prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        fullname: true,
+        email: true,
+        role: true,
+        isBlocked: true,
+        isVerified: true,
+        points: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  updateBlockStatus(id, isBlocked) {
+    return prisma.user.update({
+      where: { id },
+      data: { isBlocked },
+      select: {
+        id: true,
+        fullname: true,
+        email: true,
+        role: true,
+        isBlocked: true,
+      },
+    });
   }
 }
 

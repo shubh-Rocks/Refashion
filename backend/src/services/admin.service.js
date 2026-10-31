@@ -62,6 +62,28 @@ class AdminService {
       },
     };
   }
+
+  async blockUser(id, adminId) {
+    const user = await userRepository.findById(id);
+
+    if (!user) {
+      throw new Error("user not found");
+    }
+
+    if (user.id === adminId) {
+      throw new Error("You cannot block yourself");
+    }
+
+    if (user.role === "ADMIN") {
+      throw new Error("Cannot block an admin user");
+    }
+
+    if (user.isBlocked) {
+      throw new Error("User is already blocked");
+    }
+
+    return userRepository.updateBlockStatus(id, true);
+  }
 }
 
 export const adminServices = new AdminService();

@@ -10,4 +10,7 @@ router.get("/items/pending", adminController.getPendingItems);
 router.patch("/items/:id/reject", adminController.rejectItem);
 router.patch("/items/:id/approve", adminController.approveItem);
 
+router.get("/users", adminController.getUsers);
+router.patch("/users/:id/block", adminController.blockUser);
+
 export default router;

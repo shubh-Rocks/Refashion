@@ -53,6 +53,22 @@ class AdminController {
       next(error);
     }
   }
+
+  async blockUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const adminId = req.session.user.id;
+
+      const user = await adminServices.blockUser(id, adminId);
+
+      res.status(200).json({
+        message: "User blocked successfully",
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();
