@@ -13,6 +13,20 @@ class AdminController {
       next(error);
     }
   }
+
+  async rejectItem(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { rejectReason } = req.body;
+      const item = await adminServices.rejectItems(id, rejectReason);
+      res.status(200).json({
+        message: "Item rejected successfully",
+        item,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();
