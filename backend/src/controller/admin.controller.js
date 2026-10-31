@@ -18,9 +18,22 @@ class AdminController {
     try {
       const { id } = req.params;
       const { rejectReason } = req.body;
-      const item = await adminServices.rejectItems(id, rejectReason);
+      const item = await adminServices.rejectItem(id, rejectReason);
       res.status(200).json({
         message: "Item rejected successfully",
+        item,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async approveItem(req, res, next) {
+    try {
+      const { id } = req.params;
+      const item = await adminServices.approveItem(id);
+      res.status(200).json({
+        message: "Item approved successfully",
         item,
       });
     } catch (error) {

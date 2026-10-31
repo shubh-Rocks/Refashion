@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(isAuthenticated, authorize("ADMIN"));
 
 router.get("/items/pending", adminController.getPendingItems);
-router.patch("/api/admin/items/:id/reject", adminController.rejectItem);
+router.patch("/items/:id/reject", adminController.rejectItem);
+router.patch("/items/:id/approve", adminController.approveItem);
 
 export default router;

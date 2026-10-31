@@ -6,7 +6,7 @@ class AdminService {
     return items;
   }
 
-  async rejectItems(id, rejectReason) {
+  async rejectItem(id, rejectReason) {
     const item = await itemRepository.findById(id);
     if (!item) {
       throw new Error("Item not found");
@@ -19,6 +19,22 @@ class AdminService {
     const updated = await itemRepository.updateStatus(id, {
       status: "REJECTED",
       rejectReason,
+    });
+    return updated;
+  }
+
+  async approveItem(id) {
+    const item = await itemRepository.findById(id);
+    if (!item) {
+      throw new Error("item not found");
+    }
+
+    if (item.status !== "PENDING") {
+      throw new Error("Only pending items can be approved");
+    }
+
+    const updated = await itemRepository.updateStatus(id, {
+      status: "APPROVED",
     });
     return updated;
   }
