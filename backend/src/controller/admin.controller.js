@@ -40,6 +40,19 @@ class AdminController {
       next(error);
     }
   }
+
+  async getUsers(req, res, next) {
+    try {
+      const { page, limit } = req.query;
+      const result = await adminServices.getUsers(page, limit);
+      res.status(200).json({
+        message: "Users fetched successfully",
+        ...result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();

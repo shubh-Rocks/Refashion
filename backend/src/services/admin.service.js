@@ -1,4 +1,5 @@
 import { itemRepository } from "../repository/items.repository.js";
+import { userRepository } from "../repository/user.repository.js";
 
 class AdminService {
   async getPendingItems() {
@@ -37,6 +38,29 @@ class AdminService {
       status: "APPROVED",
     });
     return updated;
+  }
+
+  async getUsers(page = 1, limit = 10) {
+    const pageNum = Math.max(1, Number(page) || 1);
+    const listNum = Math.min(50, Math.max(1, Number(limit) || 10));
+    const skip = (pageNum - 1) * listNum;
+
+    const [users, total] = await Promise.all([
+      userRepository.findAllForAdmin({
+        skip,
+        take: listNum,
+      }),
+    ]);
+
+    return {
+      users,
+      pagination: {
+        page: pageNum,
+        limit: listNum,
+        total,
+        totalPages: Math.ceil(total / listNum) || 1,
+      },
+    };
   }
 }
 

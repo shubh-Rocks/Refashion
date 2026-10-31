@@ -37,6 +37,28 @@ class UserRepository {
       data,
     });
   }
+
+  findAllForAdmin(skip, take) {
+    return prisma.user.findMany({
+      skip,
+      take,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        fullname: true,
+        email: true,
+        points: true,
+        isBlocked: true,
+        isVerified: true,
+        avatar: true,
+        createdAt: true,
+      },
+    });
+  }
+  
+  countAll() {
+    return prisma.user.count();
+  }
 }
 
 export const userRepository = new UserRepository();
