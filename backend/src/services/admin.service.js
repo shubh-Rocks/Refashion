@@ -126,6 +126,31 @@ class AdminService {
     };
   }
 
+  async reportResolve(id) {
+    const report = await reportRepository.findById(id);
+    if (!report) {
+      throw new Error("Report not found");
+    }
+
+    if (report.status !== "PENDING") {
+      throw new Error("Only pending reports can be resolved");
+    }
+
+    return reportRepository.updateStatus(id, { status: "RESOLVED" });
+  }
+
+  async reportDismiss(id) {
+    const report = await reportRepository.findById(id);
+    if (!report) {
+      throw new Error("Report not found");
+    }
+
+    if (report.status !== "PENDING") {
+      throw new Error("Only pending reports can be resolved");
+    }
+
+    return reportRepository.updateStatus(id, { status: "DISMISSED" });
+  }
   
 }
 

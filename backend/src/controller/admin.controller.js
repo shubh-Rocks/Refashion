@@ -96,6 +96,31 @@ class AdminController {
       next(error);
     }
   }
+
+  async reportResolve(req, res, next) {
+    try {
+      const { id } = req.params;
+      const report = await adminServices.reportResolve(id);
+      res.status(200).json({
+        message: "Report resolved successfully",
+        report,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async reportDismiss(req, res, next) {
+    try {
+      const { id } = req.params;
+      const report = await adminServices.reportDismiss(id);
+      res.status(200).json({
+        message: "Report dismissed successfully",
+        report,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();

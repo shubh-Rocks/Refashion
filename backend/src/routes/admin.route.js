@@ -18,5 +18,7 @@ router.patch("/users/:id/unblock", adminController.unBlockUser);
 
 // reports routes
 router.get("/reports", adminController.getReports);
+router.patch("/reports/:id/resolve", adminController.reportResolve);
+router.patch("/reports/:id/dismiss", adminController.reportDismiss);
 
 export default router;
