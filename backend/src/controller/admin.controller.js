@@ -83,6 +83,19 @@ class AdminController {
       next(error);
     }
   }
+
+  async getReports(req, res, next) {
+    try {
+      const { page, limit } = req.query;
+      const report = await adminServices.getRepots(page, limit);
+      res.status(200).json({
+        message: "reports fetched successfully",
+        ...report,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();

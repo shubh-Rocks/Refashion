@@ -1,7 +1,9 @@
 import { itemRepository } from "../repository/items.repository.js";
+import { reportRepository } from "../repository/report.repository.js";
 import { userRepository } from "../repository/user.repository.js";
 
 class AdminService {
+  // items services
   async getPendingItems() {
     const items = await itemRepository.findPendingItems();
     return items;
@@ -40,6 +42,7 @@ class AdminService {
     return updated;
   }
 
+  // users services
   async getUsers(page = 1, limit = 10) {
     const pageNum = Math.max(1, Number(page) || 1);
     const listNum = Math.min(50, Math.max(1, Number(limit) || 10));
@@ -97,6 +100,33 @@ class AdminService {
 
     return userRepository.updateBlockStatus(id, false);
   }
+
+  // reports services
+  async getRepots(page = 1, limit = 10, status) {
+    const pageNum = Math.max(1, Number(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, Number(limit)));
+    const skip = (pageNum - 1) * limitNum;
+
+    const [reports, total] = await Promise.all([
+      reportRepository.findAllForAdmin({
+        skip,
+        take: limitNum,
+        status,
+      }),
+    ]);
+
+    return {
+      reports,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        totalPages: Math.ceil(total / limitNum) || 1,
+      },
+    };
+  }
+
+  
 }
 
 export const adminServices = new AdminService();

@@ -6,11 +6,17 @@ const router = express.Router();
 
 router.use(isAuthenticated, authorize("ADMIN"));
 
+// items routes
 router.get("/items/pending", adminController.getPendingItems);
 router.patch("/items/:id/reject", adminController.rejectItem);
 router.patch("/items/:id/approve", adminController.approveItem);
 
+// users routes
 router.get("/users", adminController.getUsers);
 router.patch("/users/:id/block", adminController.blockUser);
 router.patch("/users/:id/unblock", adminController.unBlockUser);
+
+// reports routes
+router.get("/reports", adminController.getReports);
+
 export default router;
