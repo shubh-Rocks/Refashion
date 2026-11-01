@@ -69,6 +69,20 @@ class AdminController {
       next(error);
     }
   }
+
+  async unBlockUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const user = await adminServices.unBlockUser(id);
+
+      res.status(200).json({
+        message: "User unblocked successfully",
+        user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();

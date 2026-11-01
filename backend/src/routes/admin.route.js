@@ -12,5 +12,5 @@ router.patch("/items/:id/approve", adminController.approveItem);
 
 router.get("/users", adminController.getUsers);
 router.patch("/users/:id/block", adminController.blockUser);
-
+router.patch("/users/:id/unblock", adminController.unBlockUser);
 export default router;

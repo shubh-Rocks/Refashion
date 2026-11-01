@@ -84,6 +84,19 @@ class AdminService {
 
     return userRepository.updateBlockStatus(id, true);
   }
+
+  async unBlockUser(id) {
+    const user = await userRepository.findById(id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.isBlocked) {
+      throw new Error("User is not blocked");
+    }
+
+    return userRepository.updateBlockStatus(id, false);
+  }
 }
 
 export const adminServices = new AdminService();
