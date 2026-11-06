@@ -2,9 +2,13 @@
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/authStore";
 import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AuthProvider({ children }) {
-  const { setUser, setLoading } = useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { user, isAuthenticated, isLoading, setUser, setLoading } =
+    useAuthStore();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -20,5 +24,14 @@ export default function AuthProvider({ children }) {
     };
     loadUser();
   }, [setUser, setLoading]);
+
+  useEffect(() => {
+    if (pathname !== "/" || isLoading || !isAuthenticated || !user) return;
+
+    router.replace(user.role === "ADMIN" ? "/admin" : "/user");
+  }, [pathname, isLoading, isAuthenticated, user, router]);
+
   return children;
 }
+
+

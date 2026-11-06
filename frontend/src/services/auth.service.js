@@ -6,5 +6,5 @@ export const authService = {
   verifyOtp: (data) => apiClient.post("/auth/verify-otp", data),
   resendOtp: (data) => apiClient.post("/auth/resend-otp", data),
   logout: (data) => apiClient.post("/auth/logout", data),
-  getme: (data) => apiClient.get("/auth/me", data),
+  getme: (data) => apiClient.get("/auth/get", data),
 };
