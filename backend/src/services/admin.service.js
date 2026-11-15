@@ -53,6 +53,7 @@ class AdminService {
         skip,
         take: listNum,
       }),
+      userRepository.countAll(),
     ]);
 
     return {
@@ -151,7 +152,6 @@ class AdminService {
 
     return reportRepository.updateStatus(id, { status: "DISMISSED" });
   }
-  
 }
 
 export const adminServices = new AdminService();

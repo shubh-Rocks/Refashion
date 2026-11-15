@@ -22,3 +22,4 @@ router.patch("/reports/:id/resolve", adminController.reportResolve);
 router.patch("/reports/:id/dismiss", adminController.reportDismiss);
 
 export default router;
+

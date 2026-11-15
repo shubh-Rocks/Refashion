@@ -38,10 +38,12 @@ class UserRepository {
     });
   }
 
-  findAllForAdmin(skip, take) {
+  findAllForAdmin({skip, take}) {
+    const pageSkip = Number(skip) || 0;
+    const pageTake = Number(take) || 10;
     return prisma.user.findMany({
-      skip,
-      take,
+      skip: pageSkip,
+      take: pageTake,
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
