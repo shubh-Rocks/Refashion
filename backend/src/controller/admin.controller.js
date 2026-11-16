@@ -3,11 +3,12 @@ import { adminServices } from "../services/admin.service.js";
 class AdminController {
   async getPendingItems(req, res, next) {
     try {
-      const items = await adminServices.getPendingItems();
+      const result = await adminServices.getPendingItems(req.query);
       res.status(200).json({
         message: "Pending items fetched successfully",
-        count: items.length,
-        items,
+        count: result.items.length,
+        items: result.items,
+        pagination: result.pagination,
       });
     } catch (error) {
       next(error);

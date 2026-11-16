@@ -4,9 +4,9 @@ import { userRepository } from "../repository/user.repository.js";
 
 class AdminService {
   // items services
-  async getPendingItems() {
-    const items = await itemRepository.findPendingItems();
-    return items;
+  async getPendingItems(query) {
+    const result = await itemRepository.findPendingItems(query);
+    return result;
   }
 
   async rejectItem(id, rejectReason) {
