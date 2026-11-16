@@ -10,6 +10,8 @@ export async function proxy(request) {
 
   const isPublicPage =
     pathname === "/" || pathname === "/login" || pathname === "/register";
+
+  // Updated to cover all admin sub-routes (dashboard, reports, users, etc.)
   const isAdminPage = pathname.startsWith("/admin");
   const isUserDashboard = pathname.startsWith("/dashboard");
 
@@ -34,7 +36,7 @@ export async function proxy(request) {
     const role = user?.role?.toLowerCase();
 
     if (isPublicPage) {
-      const target = role === "admin" ? "/admin" : "/dashboard";
+      const target = role === "admin" ? "/admin/dashboard" : "/dashboard";
       return NextResponse.redirect(new URL(target, request.url));
     }
 
@@ -43,14 +45,12 @@ export async function proxy(request) {
     }
 
     if (isUserDashboard && role === "admin") {
-      return NextResponse.redirect(new URL("/admin", request.url));
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
 
     return NextResponse.next();
   } catch (error) {
-    console.error(
-      error.response?.status || error.message,
-    );
+    console.error(error.response?.status || error.message);
 
     if (isAdminPage || isUserDashboard) {
       const res = NextResponse.redirect(new URL("/login", request.url));
@@ -61,8 +61,6 @@ export async function proxy(request) {
 
   return NextResponse.next();
 }
-
-export default proxy;
 
 export const config = {
   matcher: ["/", "/login", "/register", "/dashboard/:path*", "/admin/:path*"],

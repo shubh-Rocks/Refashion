@@ -27,7 +27,7 @@ export default function LoginPage() {
       const res = await authService.login(data);
       setUser(res.data.user);
       if (res.data.user.role === "ADMIN") {
-        router.push("/admin");
+        router.push("/dashboard/admin");
       } else {
         router.push("/user");
       }
