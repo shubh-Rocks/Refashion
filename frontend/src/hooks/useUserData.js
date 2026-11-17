@@ -12,7 +12,13 @@ export const useUsersData = (filters) => {
   const query = useQuery({
     queryKey: ["adminUsers", filters],
     queryFn: () =>
-      adminService.getUsers(filters.currentPage, filters.limit, filters),
+      adminService.getUsers({
+        page: filters.currentPage,
+        limit: filters.limit || 10,
+        search: filters.searchQuery,
+        role: filters.selectedRole,
+        status: filters.selectedStatus,
+      }),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 1,
     gcTime: 1000 * 60 * 10,

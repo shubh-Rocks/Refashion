@@ -3,11 +3,10 @@ import apiClient from "@/lib/apiClient";
 export const adminService = {
   //   User data fetching routes
 
-  getUsers: async (page = 1, limit = 10) => {
-    const response = await apiClient.get(
-      `admin/users?page=${page}&limit${limit}`,
-    );
-    return response.data;
+  getUsers: async (filters) => {
+    const params = new URLSearchParams(filters);
+    const response = await apiClient.get(`admin/users?${params.toString()}`);
+    return response.data || { items: [], count: 0 };
   },
 
   blockUser: async (id) => {
@@ -17,7 +16,7 @@ export const adminService = {
 
   unBlockUser: async (id) => {
     const response = await apiClient.patch(`admin/users/${id}/unblock`);
-    response.data;
+    return response.data;
   },
 
   //  Items data fetching routes
@@ -27,7 +26,6 @@ export const adminService = {
     const response = await apiClient.get(
       `/admin/items/pending?${params.toString()}`,
     );
-    response.data;
     return response.data || { items: [], count: 0 };
   },
 
@@ -43,9 +41,10 @@ export const adminService = {
 
   // reports data fetching routes
 
-  getReports: async (page = 1, limit = 10) => {
+  getReports: async (filters) => {
+    const params = new URLSearchParams(filters);
     const response = await apiClient.get(
-      `/admin/reports?page=${page}&limit=${limit}`,
+      `/admin/reports?page=${params.toString()}`,
     );
     return response.data;
   },
