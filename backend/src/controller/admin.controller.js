@@ -44,8 +44,7 @@ class AdminController {
 
   async getUsers(req, res, next) {
     try {
-      const { page, limit } = req.query;
-      const result = await adminServices.getUsers(page, limit);
+      const result = await adminServices.getUsers(req.query);
       res.status(200).json({
         message: "Users fetched successfully",
         ...result,
@@ -87,8 +86,7 @@ class AdminController {
 
   async getReports(req, res, next) {
     try {
-      const { page, limit } = req.query;
-      const report = await adminServices.getRepots(page, limit);
+      const report = await adminServices.getRepots(req.query);
       res.status(200).json({
         message: "reports fetched successfully",
         ...report,

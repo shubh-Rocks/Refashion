@@ -38,24 +38,67 @@ class UserRepository {
     });
   }
 
-  findAllForAdmin({skip, take}) {
-    const pageSkip = Number(skip) || 0;
-    const pageTake = Number(take) || 10;
-    return prisma.user.findMany({
-      skip: pageSkip,
-      take: pageTake,
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        fullname: true,
-        email: true,
-        points: true,
-        isBlocked: true,
-        isVerified: true,
-        avatar: true,
-        createdAt: true,
+  async findAllForAdmin(filters = {}) {
+    const { role, status, search, searchQuery, page = 1, limit = 10 } = filters;
+
+    const finalSearch = searchQuery || search;
+
+    const pageNumber = Number(page) || 0;
+    const pageSize = Number(limit) || 10;
+
+    const skip = (pageNumber - 1) * pageSize;
+
+    const where = {};
+
+    if (role && role !== "all") {
+      where.role = role;
+    }
+
+    if (status && status !== "all") {
+      const lowerStatus = status.toLowerCase();
+      if (lowerStatus === "blocked") {
+        where.isBlocked = true;
+      } else if (lowerStatus === "active") {
+        where.isBlocked = false;
+      }
+    }
+
+    if (finalSearch) {
+      where.OR = [
+        { fullname: { contains: finalSearch, mode: "insensitive" } },
+        { email: { contains: finalSearch, mode: "insensitive" } },
+      ];
+    }
+
+    const [users, totalCount] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        skip: skip,
+        take: pageSize,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          points: true,
+          isBlocked: true,
+          isVerified: true,
+          avatar: true,
+          createdAt: true,
+        },
+      }),
+      prisma.user.count({ where }),
+    ]);
+
+    return {
+      users,
+      pagination: {
+        total: totalCount,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(totalCount / pageSize),
       },
-    });
+    };
   }
 
   countAll() {
