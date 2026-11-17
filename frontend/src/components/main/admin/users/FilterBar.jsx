@@ -1,5 +1,6 @@
-import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { useUsersStore } from "@/store/useUsersStore";
+import { useEffect, useState } from "react";
 
 export default function FilterBar() {
   const {
@@ -11,6 +12,16 @@ export default function FilterBar() {
     setSelectedStatus,
   } = useUsersStore();
 
+  const [text, setText] = useState(searchQuery);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(text);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [text, setSearchQuery]);
+
   return (
     <div className="p-6 border-b border-gray-200 space-y-4 bg-white">
       {/* Search Input */}
@@ -19,8 +30,8 @@ export default function FilterBar() {
         <input
           type="text"
           placeholder="Search name or email"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
           className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700"
         />
       </div>
