@@ -9,8 +9,6 @@ export default function FilterBar() {
     setSelectedRole,
     selectedStatus,
     setSelectedStatus,
-    sortOrder,
-    setSortOrder,
   } = useUsersStore();
 
   return (
@@ -55,19 +53,6 @@ export default function FilterBar() {
             <option value="Blocked">Blocked</option>
           </select>
           <ChevronDown className="absolute right-3.5 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
-        </div>
-
-        {/* Sort Button */}
-        <div className="flex justify-end">
-          <button
-            onClick={() =>
-              setSortOrder(sortOrder === "Newest" ? "Oldest" : "Newest")
-            }
-            className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            <SlidersHorizontal className="h-4 w-4 text-gray-500" />
-            <span>{sortOrder}</span>
-          </button>
         </div>
       </div>
     </div>
