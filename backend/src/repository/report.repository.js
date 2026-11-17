@@ -9,7 +9,7 @@ class ReportRepository {
       orderBy: { createdAt: "desc" },
       include: {
         reporter: {
-          select: { id: true, name: true, email: true },
+          select: { id: true, fullname: true, email: true },
         },
         item: {
           select: {

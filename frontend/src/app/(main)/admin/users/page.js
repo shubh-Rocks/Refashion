@@ -13,7 +13,6 @@ export default function UsersAdminPage() {
     searchQuery,
     selectedRole,
     selectedStatus,
-    sortOrder,
     currentPage,
     limit,
   } = useUsersStore();
@@ -22,7 +21,6 @@ export default function UsersAdminPage() {
     searchQuery,
     selectedRole,
     selectedStatus,
-    sortOrder,
     currentPage,
     limit,
   });
