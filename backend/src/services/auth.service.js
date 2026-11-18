@@ -88,7 +88,7 @@ class AuthService {
 
     return {
       id: user.id,
-      name: user.name,
+      fullname: user.fullname,
       email: user.email,
       role: user.role,
       points: user.points,
