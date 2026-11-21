@@ -70,7 +70,7 @@ class UserRepository {
       ];
     }
 
-    const [users, totalCount] = await Promise.all([
+    const [users, totalCount, totalBlockUser] = await Promise.all([
       prisma.user.findMany({
         where,
         skip: skip,
@@ -88,10 +88,19 @@ class UserRepository {
         },
       }),
       prisma.user.count({ where }),
+      prisma.user.count({
+        where: { isBlocked: true },
+      }),
+      prisma.user.count.apply({
+        where:{
+          
+        }
+      })
     ]);
 
     return {
       users,
+      totalBlockUser,
       pagination: {
         total: totalCount,
         page: pageNumber,
