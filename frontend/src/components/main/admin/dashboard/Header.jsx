@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
-import { Bell, ChevronDown } from "lucide-react";
+import { Bell } from "lucide-react";
 
 export default function Header() {
   const { user } = useAuthStore();
