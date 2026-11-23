@@ -44,7 +44,7 @@ export const adminService = {
   getReports: async (filters) => {
     const params = new URLSearchParams(filters);
     const response = await apiClient.get(
-      `/admin/reports?page=${params.toString()}`,
+      `/admin/reports?page?${params.toString()}`,
     );
     return response.data;
   },

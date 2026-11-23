@@ -49,9 +49,9 @@ export default function PendingItemsPage() {
           </div>
 
           <FilterBar />
-          
+
           <PendingTable items={data?.items || []} onReview={handleReview} />
-          <Pagination />
+          <Pagination paginationData={data?.pagination} />
         </div>
       </div>
     </div>
