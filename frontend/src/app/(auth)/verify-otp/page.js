@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef } from "react";
+
+import { Suspense, useState, useRef } from "react";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/authStore";
 import { verifyOtpSchema } from "@/validations/auth.validation";
@@ -8,10 +9,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
-export default function VerifyOtpPage() {
+function VerifyOtpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "your email";
+  const email = searchParams.get("email") || "";
 
   const { setLoading, isLoading, setUser } = useAuthStore();
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
@@ -23,6 +24,7 @@ export default function VerifyOtpPage() {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors },
     setError,
   } = useForm({
@@ -40,15 +42,16 @@ export default function VerifyOtpPage() {
 
     const combinedOtp = newOtpValues.join("");
     setValue("otp", combinedOtp, { shouldValidate: true });
+    clearErrors("root");
 
     if (value && index < 5) {
-      inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otpValues[index] && index > 0) {
-      inputRefs.current[index - 1].focus();
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
@@ -64,9 +67,10 @@ export default function VerifyOtpPage() {
 
       const combinedOtp = newOtpValues.join("");
       setValue("otp", combinedOtp, { shouldValidate: true });
+      clearErrors("root");
 
       if (pastedData.length <= 6) {
-        inputRefs.current[Math.min(pastedData.length, 5)].focus();
+        inputRefs.current[Math.min(pastedData.length - 1, 5)]?.focus();
       }
     }
   };
@@ -74,9 +78,10 @@ export default function VerifyOtpPage() {
   const handleResendOtp = async () => {
     setResendLoading(true);
     setSuccessMsg("");
+    clearErrors("root");
     try {
       await authService.resendOtp({ email });
-      setSuccessMsg("New OTP sent successfully in your email ");
+      setSuccessMsg("New OTP sent successfully to your email.");
     } catch (error) {
       setError("root", {
         message: error.response?.data?.message || "Failed to send OTP",
@@ -86,10 +91,9 @@ export default function VerifyOtpPage() {
     }
   };
 
- 
   const onSubmit = async (data) => {
-    console.log("Form submitted data:", data);
     setLoading(true);
+    clearErrors("root");
 
     try {
       const res = await authService.verifyOtp({ email, otp: data.otp });
@@ -135,19 +139,15 @@ export default function VerifyOtpPage() {
             Enter verification code.
           </h1>
           <p className="text-sm text-gray-600">
-            We've sent a 6-digit code to{" "}
+            We&apos;ve sent a 6-digit code to{" "}
             <span className="font-medium text-[#1a2e22]">{email}</span>. Enter
             it below to verify your account.
           </p>
         </div>
 
         {/* OTP Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <input type="hidden" {...register("otp")} />
-          <input type="hidden" value={email} {...register("email")} />
           <div
             className="flex justify-between gap-2 sm:gap-3"
             onPaste={handlePaste}
@@ -157,6 +157,7 @@ export default function VerifyOtpPage() {
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
+                inputMode="numeric"
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
@@ -166,14 +167,16 @@ export default function VerifyOtpPage() {
             ))}
           </div>
 
-          {/* Zod validation error for OTP */}
+          {successMsg && (
+            <p className="text-sm text-emerald-700 text-center">{successMsg}</p>
+          )}
+
           {errors.otp && (
             <p className="text-sm text-red-500 text-center">
               {errors.otp.message}
             </p>
           )}
 
-          {/* Root/API error */}
           {errors.root && (
             <p className="text-sm text-red-500 text-center">
               {errors.root.message}
@@ -190,7 +193,7 @@ export default function VerifyOtpPage() {
         </form>
 
         <div className="text-center text-sm text-gray-600">
-          Didn't receive the code?
+          Didn&apos;t receive the code?{" "}
           <button
             type="button"
             onClick={handleResendOtp}
@@ -208,5 +211,19 @@ export default function VerifyOtpPage() {
         and respectful.
       </div>
     </div>
+  );
+}
+
+export default function VerifyOtpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center text-sm text-gray-500">
+          Loading verification page...
+        </div>
+      }
+    >
+      <VerifyOtpContent />
+    </Suspense>
   );
 }

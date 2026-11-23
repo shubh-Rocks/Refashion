@@ -6,15 +6,21 @@ const BACKEND_URL =
 
 export async function proxy(request) {
   const sessionCookie = request.cookies.get("refashion.sid");
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
 
   const isPublicPage =
     pathname === "/" || pathname === "/login" || pathname === "/register";
 
-  // Updated to cover all admin sub-routes (dashboard, reports, users, etc.)
+    
   const isAdminPage = pathname.startsWith("/admin");
   const isUserDashboard = pathname.startsWith("/dashboard");
 
+  if (pathname === "/verify-otp") {
+    const email = searchParams.get("email")?.trim();
+    if (!email) {
+      return NextResponse.redirect(new URL("/register", request.url));
+    }
+  }
   if (!sessionCookie) {
     if (isAdminPage || isUserDashboard) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -63,5 +69,12 @@ export async function proxy(request) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/register", "/dashboard/:path*", "/admin/:path*"],
+  matcher: [
+    "/",
+    "/login",
+    "/register",
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/verify-otp",
+  ],
 };
