@@ -84,28 +84,9 @@ class AdminService {
   }
 
   // reports services
-  async getRepots(page = 1, limit = 10, status) {
-    const pageNum = Math.max(1, Number(page) || 1);
-    const limitNum = Math.min(50, Math.max(1, Number(limit)));
-    const skip = (pageNum - 1) * limitNum;
-
-    const [reports, total] = await Promise.all([
-      reportRepository.findAllForAdmin({
-        skip,
-        take: limitNum,
-        status,
-      }),
-    ]);
-
-    return {
-      reports,
-      pagination: {
-        page: pageNum,
-        limit: limitNum,
-        total,
-        totalPages: Math.ceil(total / limitNum) || 1,
-      },
-    };
+  async getRepots(query) {
+    const result = await reportRepository.findAllForAdmin(query);
+    return result;
   }
 
   async reportResolve(id) {
