@@ -11,7 +11,7 @@ const outfit = Outfit({
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 
 export const metadata = {
-  title: "Refashion – Swap your style. Save the circle.",
+  title: "Refashion  Swap your style. Save the circle.",
   description:
     "Trade your unworn treasures directly with people who value them. Earn points for every piece you pass on.",
 };

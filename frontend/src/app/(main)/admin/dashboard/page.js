@@ -8,11 +8,7 @@ import CommunityReports from "@/components/main/admin/dashboard/CommunityReports
 import AuditTrail from "@/components/main/admin/dashboard/AuditTrail";
 
 export default function AdminDashboardPage() {
-  const { data, isLoading, reviewMutation } = useAdminData();
-
-  const handleReview = (id, action) => {
-    reviewMutation.mutate({ id, action });
-  };
+  const { isLoading } = useAdminData();
 
   if (isLoading) {
     return (
@@ -32,11 +28,11 @@ export default function AdminDashboardPage() {
         <MetricCards />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <PendingItems  onReview={handleReview} />
-          <CommunityReports reports={data?.reports} />
+          <PendingItems />
+          <CommunityReports />
         </div>
 
-        <AuditTrail activity={data?.activity} />
+        <AuditTrail />
       </div>
     </div>
   );
