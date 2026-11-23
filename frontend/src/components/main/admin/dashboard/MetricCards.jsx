@@ -10,7 +10,7 @@ export default function MetricCards() {
     data,
     totalUsers,
     pendingCount,
-    blockedCount,
+    blockUsers,
     isLoading,
     isError,
     error,
@@ -19,8 +19,7 @@ export default function MetricCards() {
 
   const usersCount = totalUsers ?? data?.totalUsers ?? 0;
   const pendingItemsCount = pendingCount ?? data?.pendingCount ?? 0;
-  const blockedUsersCount =
-    blockedCount ?? data?.totalBlockUser ?? data?.blockedUsers ?? 0;
+  const blockedUsersCount = blockUsers ?? data?.blockUsers ?? 0;
 
   const cards = [
     {
