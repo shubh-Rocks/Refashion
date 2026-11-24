@@ -1,6 +1,4 @@
 import { useAuthStore } from "@/store/authStore";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function WelcomeBanner() {
