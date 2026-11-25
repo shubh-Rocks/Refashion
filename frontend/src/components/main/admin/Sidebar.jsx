@@ -8,7 +8,6 @@ import {
   ArrowRightLeft,
   Settings,
   LogOut,
-  Leaf,
   Menu,
   ChevronLeft,
 } from "lucide-react";
